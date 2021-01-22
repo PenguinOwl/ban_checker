@@ -5,9 +5,9 @@ require "discordrb"
 infractions = {}
 
 def process_message(content, time, infractions)
-  match = content.match(/\d{8}\d+/)
+  match = content.match(/(7656\d{8}\d+|\d{8}\d+(?=@discord))/)
   return 0 unless match
-  number = match[0].to_i & 0xFFFFFFFF
+  number = match[1].to_i & 0xFFFFFFFF
   if infractions[number]
     infractions[number] << time
   else
@@ -46,7 +46,7 @@ channel = nil
 
 if File.exists? ".banbot.config"
   File.open(".banbot.config", "r") do |f|
-    channel = f.read
+    channel = f.read.strip
   end
 else
   channel = "ban-reports"
